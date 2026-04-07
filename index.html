@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+body {
+  margin:0;
+}
+.box {
+  width:100%;
+  height:100vh;
+  background:url('https://stimg.sooplive.com/NORMAL_BBS/4/29344534/957369d5478ab9564.png') center/cover;
+}
+</style>
+</head>
+<body>
+
+<div class="box"></div>
+
+<script>
+const box = document.querySelector('.box');
+
+document.addEventListener('mousemove', (e)=>{
+  box.style.maskImage = `radial-gradient(circle 80px at ${e.clientX}px ${e.clientY}px, transparent 0%, black 100%)`;
+  box.style.webkitMaskImage = `radial-gradient(circle 80px at ${e.clientX}px ${e.clientY}px, transparent 0%, black 100%)`;
+});
+</script>
+
+</body>
+</html>
