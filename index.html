@@ -12,7 +12,10 @@ body {
 .bg {
   width:100%;
   height:100vh;
-  background:url('https://stimg.sooplive.com/NORMAL_BBS/4/29344534/289769d55d15463cc.png') center/cover no-repeat;
+  background-image: url("https://stimg.sooplive.com/NORMAL_BBS/4/29344534/289769d55d15463cc.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* 검정 덮개 */
@@ -24,9 +27,6 @@ body {
   height:100%;
   background:black;
   pointer-events:none;
-
-  -webkit-mask-image: radial-gradient(circle 0px at 50% 50%, transparent 0%, black 100%);
-  mask-image: radial-gradient(circle 0px at 50% 50%, transparent 0%, black 100%);
 }
 </style>
 </head>
@@ -36,15 +36,16 @@ body {
 <div class="overlay" id="overlay"></div>
 
 <script>
-const overlay = document.getElementById('overlay');
+const overlay = document.getElementById("overlay");
 
-document.addEventListener('mousemove', (e)=>{
+document.addEventListener("mousemove", function(e) {
   const x = e.clientX;
   const y = e.clientY;
 
-  const size = 140;
+  const size = 140; // 👉 원 크기 (원하면 숫자 바꿔)
 
-  const gradient = `radial-gradient(circle ${size}px at ${x}px ${y}px, transparent 0%, transparent 99%, black 100%)`;
+  const gradient =
+    "radial-gradient(circle " + size + "px at " + x + "px " + y + "px, transparent 0%, transparent 99%, black 100%)";
 
   overlay.style.webkitMaskImage = gradient;
   overlay.style.maskImage = gradient;
