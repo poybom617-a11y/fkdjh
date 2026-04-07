@@ -24,8 +24,8 @@ html, body {
   left:0;
   width:100%;
   height:100%;
-  background-image: url("https://stimg.sooplive.com/NORMAL_BBS/4/29344534/509469d55efa352bc.png?v=3");
-  background-size: contain; /* 🔥 안 잘림 */
+  background-image: url("https://stimg.sooplive.com/NORMAL_BBS/4/29344534/509469d55efa352bc.png?v=4");
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -39,8 +39,6 @@ html, body {
   height:100%;
   background:black;
   pointer-events:none;
-
-  clip-path: circle(0px at 50% 50%);
 }
 </style>
 </head>
@@ -60,9 +58,13 @@ box.addEventListener("mousemove", function(e) {
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
 
-  const size = 160; // 👉 원 크기
+  const size = 120; // 👉 살짝 줄인 크기
 
-  overlay.style.clipPath = `circle(${size}px at ${x}px ${y}px)`;
+  const gradient =
+    `radial-gradient(circle ${size}px at ${x}px ${y}px, transparent 0%, transparent 95%, black 100%)`;
+
+  overlay.style.webkitMaskImage = gradient;
+  overlay.style.maskImage = gradient;
 });
 </script>
 
