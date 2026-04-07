@@ -3,22 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <style>
-body {
+html, body {
   margin:0;
+  height:100%;
+  background:black;
   overflow:hidden;
 }
 
-.bg {
+/* 컨테이너 */
+.container {
+  position:relative;
   width:100%;
-  height:100vh;
-  background-image: url("https://stimg.sooplive.com/NORMAL_BBS/4/29344534/509469d55efa352bc.png?v=1");
-  background-size: cover;
+  height:100%;
+}
+
+/* 이미지 */
+.bg {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-image: url("https://stimg.sooplive.com/NORMAL_BBS/4/29344534/509469d55efa352bc.png?v=3");
+  background-size: contain; /* 🔥 안 잘림 */
   background-position: center;
   background-repeat: no-repeat;
 }
 
+/* 검정 덮개 */
 .overlay {
-  position:fixed;
+  position:absolute;
   top:0;
   left:0;
   width:100%;
@@ -32,17 +46,21 @@ body {
 </head>
 <body>
 
-<div class="bg"></div>
-<div class="overlay" id="overlay"></div>
+<div class="container" id="box">
+  <div class="bg"></div>
+  <div class="overlay" id="overlay"></div>
+</div>
 
 <script>
 const overlay = document.getElementById("overlay");
+const box = document.getElementById("box");
 
-document.addEventListener("mousemove", function(e) {
-  const x = e.clientX;
-  const y = e.clientY;
+box.addEventListener("mousemove", function(e) {
+  const rect = box.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
 
-  const size = 140;
+  const size = 160; // 👉 원 크기
 
   overlay.style.clipPath = `circle(${size}px at ${x}px ${y}px)`;
 });
