@@ -1,476 +1,353 @@
 <!DOCTYPE html>
-
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Birthday Invitation</title>
+<title>포밤이 생일 초대장</title>
 
 <style>
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
 body{
-    width:100vw;
-    height:100vh;
-    overflow:hidden;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(180deg,#eef7ff,#d7e9ff);
-    font-family:sans-serif;
+width:100vw;
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(180deg,#eef7ff,#d8ebff);
+font-family:sans-serif;
 }
 
 .container{
-    position:relative;
-    width:100%;
-    height:100%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+position:relative;
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
 }
 
-/* 초대장 */
+/* 카드 */
 
 .card{
-    position:absolute;
-    width:min(92vw,700px);
-    z-index:5;
-    cursor:pointer;
+position:absolute;
+width:min(92vw,700px);
+z-index:10;
+cursor:pointer;
 
-    transform:
-        translateY(160px)
-        scale(.45);
+opacity:0;
 
-    transition:
-        transform 1.5s cubic-bezier(.16,1,.3,1);
+transform:
+translateY(180px)
+scale(.25);
+
+transition:
+transform 1.6s cubic-bezier(.16,1,.3,1),
+opacity .8s ease;
 }
 
 .card img{
-    width:100%;
-    display:block;
-    border-radius:20px;
-    box-shadow:
-        0 25px 60px rgba(0,0,0,.25);
+width:100%;
+display:block;
+border-radius:20px;
+box-shadow:0 25px 60px rgba(0,0,0,.25);
 }
 
 /* 봉투 */
 
 .envelope{
-    position:absolute;
-    width:min(80vw,420px);
-    height:min(52vw,260px);
-    cursor:pointer;
-    z-index:20;
-    transition:all .8s ease;
+position:absolute;
+width:min(80vw,420px);
+height:min(52vw,260px);
+cursor:pointer;
+z-index:20;
+transition:.8s;
 }
 
 .back{
-    position:absolute;
-    inset:0;
-    background:#c7ddff;
-    border-radius:0 0 20px 20px;
+position:absolute;
+inset:0;
+background:#c7ddff;
+border-radius:0 0 20px 20px;
 }
 
 .front{
-    position:absolute;
-    inset:0;
-    background:#a8cbff;
+position:absolute;
+inset:0;
+background:#a8cbff;
 
-    clip-path:polygon(
-        0 0,
-        50% 58%,
-        100% 0,
-        100% 100%,
-        0 100%
-    );
+clip-path:polygon(
+0 0,
+50% 58%,
+100% 0,
+100% 100%,
+0 100%
+);
 
-    z-index:25;
+z-index:30;
 }
 
 .flap{
-    position:absolute;
-    top:0;
-    width:100%;
-    height:55%;
-    background:#8dbbff;
+position:absolute;
+top:0;
+width:100%;
+height:55%;
 
-    clip-path:polygon(
-        0 0,
-        50% 100%,
-        100% 0
-    );
+background:#8dbbff;
 
-    transform-origin:top center;
-    transition:transform 1s ease;
+clip-path:polygon(
+0 0,
+50% 100%,
+100% 0
+);
 
-    z-index:30;
+transform-origin:top center;
+transition:1s ease;
+
+z-index:40;
 }
 
 .hint{
-    position:absolute;
-    width:100%;
-    bottom:-55px;
-    text-align:center;
-    color:#5a7fc4;
-    font-weight:bold;
+position:absolute;
+width:100%;
+bottom:-55px;
+text-align:center;
+font-weight:bold;
+color:#5c7fc5;
 }
 
-/* 열림 */
+/* 파티클 */
+
+.particles{
+position:absolute;
+inset:0;
+pointer-events:none;
+overflow:hidden;
+z-index:15;
+}
+
+.particle{
+position:absolute;
+width:10px;
+height:10px;
+border-radius:50%;
+background:white;
+opacity:0;
+
+animation:
+burst 1.8s ease-out forwards;
+}
+
+@keyframes burst{
+
+0%{
+opacity:1;
+transform:
+translate(0,0)
+scale(.2);
+}
+
+100%{
+opacity:0;
+transform:
+translate(var(--x),var(--y))
+scale(1.4);
+}
+
+}
+
+/* 상태 */
 
 .open .flap{
-    transform:rotateX(180deg);
+transform:rotateX(180deg);
 }
-
-/* 봉투 안에서 카드가 올라옴 */
 
 .show-card .card{
-    transform:
-        translateY(-220px)
-        scale(.75);
-}
+opacity:1;
 
-/* 봉투 제거 */
+transform:
+translateY(-220px)
+scale(.75);
+}
 
 .remove-envelope .envelope{
-    opacity:0;
-    transform:translateY(80px);
-    pointer-events:none;
+opacity:0;
+transform:translateY(100px);
+pointer-events:none;
 }
-
-/* 중앙 확대 */
 
 .finish .card{
-    transform:
-        translateY(0)
-        scale(1);
-}
-
-/* 반짝이 */
-
-.sparkles{
-    position:absolute;
-    inset:0;
-    opacity:0;
-    pointer-events:none;
-    transition:opacity 1s;
-}
-
-.sparkles::before{
-    content:"✨ ✨ ✨ ✨ ✨";
-    position:absolute;
-    top:15%;
-    width:100%;
-    text-align:center;
-    font-size:36px;
-}
-
-.sparkles::after{
-    content:"✨ ✨ ✨ ✨ ✨";
-    position:absolute;
-    bottom:15%;
-    width:100%;
-    text-align:center;
-    font-size:36px;
-}
-
-.finish .sparkles{
-    opacity:1;
+transform:
+translateY(0)
+scale(1);
 }
 
 @media(max-width:768px){
 
 .card{
-    width:95vw;
+width:96vw;
 }
 
-.hint{
-    font-size:14px;
+.envelope{
+width:320px;
+height:200px;
 }
 
 }
 </style>
-
 </head>
 
 <body>
 
 <div class="container" id="container">
 
-```
-<div class="sparkles"></div>
+<div class="particles" id="particles"></div>
 
 <div class="card" id="card">
-    <img src="https://cdn.discordapp.com/attachments/1398286165324468308/1516456048796504115/birthday.png.png?ex=6a32b540&is=6a3163c0&hm=0c4fc8fc4590f1fe39b5df9714ee49ba6160224d8e410ec8b5c32324be45130b&" alt="">
+<img src="https://cdn.discordapp.com/attachments/1398286165324468308/1516456048796504115/birthday.png.png?ex=6a32b540&is=6a3163c0&hm=0c4fc8fc4590f1fe39b5df9714ee49ba6160224d8e410ec8b5c32324be45130b&" alt="">
 </div>
 
 <div class="envelope" id="envelope">
 
-    <div class="back"></div>
-    <div class="front"></div>
-    <div class="flap"></div>
+<div class="back"></div>
+<div class="front"></div>
+<div class="flap"></div>
 
-    <div class="hint">
-        💌 클릭해서 초대장 열기
-    </div>
+<div class="hint">
+💌 클릭해서 초대장 열기
+</div>
 
 </div>
-```
 
 </div>
 
 <script>
 
-const container = document.getElementById("container");
-const envelope = document.getElementById("envelope");
-const card = document.getElementById("card");
+const container =
+document.getElementById("container");
 
-let opened = false;
-let animating = false;
+const envelope =
+document.getElementById("envelope");
+
+const card =
+document.getElementById("card");
+
+const particles =
+document.getElementById("particles");
+
+let opened=false;
+let animating=false;
+
+function burst(){
+
+for(let i=0;i<80;i++){
+
+const p=document.createElement("div");
+
+p.className="particle";
+
+p.style.left="50%";
+p.style.top="50%";
+
+p.style.setProperty(
+"--x",
+(Math.random()-0.5)*900+"px"
+);
+
+p.style.setProperty(
+"--y",
+(Math.random()-0.5)*600+"px"
+);
+
+particles.appendChild(p);
+
+setTimeout(()=>{
+p.remove();
+},1800);
+
+}
+
+}
 
 function openEnvelope(){
 
-    if(animating || opened) return;
+if(opened || animating)
+return;
 
-    animating = true;
+animating=true;
 
-    container.classList.add("open");
+container.classList.add("open");
 
-    setTimeout(()=>{
-        container.classList.add("show-card");
-    },700);
+setTimeout(()=>{
 
-    setTimeout(()=>{
-        container.classList.add("remove-envelope");
-    },2200);
+burst();
 
-    setTimeout(()=>{
-        container.classList.add("finish");
-        opened = true;
-        animating = false;
-    },3000);
+container.classList.add("show-card");
+
+},700);
+
+setTimeout(()=>{
+
+container.classList.add("remove-envelope");
+
+},2200);
+
+setTimeout(()=>{
+
+container.classList.add("finish");
+
+opened=true;
+animating=false;
+
+},3000);
+
 }
 
 function closeEnvelope(){
 
-    if(animating || !opened) return;
+if(!opened || animating)
+return;
 
-    animating = true;
+animating=true;
 
-    container.classList.remove("finish");
+container.classList.remove("finish");
 
-    setTimeout(()=>{
-        container.classList.remove("remove-envelope");
-    },300);
+setTimeout(()=>{
+container.classList.remove("remove-envelope");
+},300);
 
-    setTimeout(()=>{
-        container.classList.remove("show-card");
-    },900);
+setTimeout(()=>{
+container.classList.remove("show-card");
+},900);
 
-    setTimeout(()=>{
-        container.classList.remove("open");
-    },1600);
+setTimeout(()=>{
+container.classList.remove("open");
+},1500);
 
-    setTimeout(()=>{
-        opened = false;
-        animating = false;
-    },2200);
+setTimeout(()=>{
+opened=false;
+animating=false;
+},2200);
+
 }
 
-envelope.addEventListener("click", openEnvelope);
-card.addEventListener("click", closeEnvelope);
+envelope.addEventListener(
+"click",
+openEnvelope
+);
+
+card.addEventListener(
+"click",
+closeEnvelope
+);
 
 </script>
 
 </body>
 </html>
-
-}
-
-/* 초대장 */
-
-.card{
-    position:absolute;
-    width:min(92vw,700px);
-    opacity:0;
-    z-index:5;
-
-    transform:
-        translateY(220px)
-        scale(.25);
-
-    transition:
-        transform 1.8s cubic-bezier(.16,1,.3,1),
-        opacity 1s;
-}
-
-.card img{
-    width:100%;
-    display:block;
-    border-radius:20px;
-    box-shadow:0 25px 60px rgba(0,0,0,.25);
-}
-
-/* 봉투 */
-
-.envelope{
-    position:absolute;
-    width:min(80vw,420px);
-    height:min(52vw,260px);
-    cursor:pointer;
-    z-index:20;
-}
-
-.back{
-    position:absolute;
-    inset:0;
-    background:#c8ddff;
-    border-radius:0 0 18px 18px;
-}
-
-.front{
-    position:absolute;
-    inset:0;
-    background:#a9cbff;
-
-    clip-path:polygon(
-        0 0,
-        50% 55%,
-        100% 0,
-        100% 100%,
-        0 100%
-    );
-}
-
-.flap{
-    position:absolute;
-    width:100%;
-    height:55%;
-    top:0;
-
-    background:#8ebcff;
-
-    clip-path:polygon(
-        0 0,
-        50% 100%,
-        100% 0
-    );
-
-    transform-origin:top;
-    transition:transform 1s ease;
-}
-
-.hint{
-    position:absolute;
-    width:100%;
-    bottom:-55px;
-    text-align:center;
-    font-weight:700;
-    color:#5b7fc0;
-}
-
-/* 열림 */
-
-.open .flap{
-    transform:rotateX(180deg);
-}
-
-.show-card .card{
-    opacity:1;
-    transform:
-        translateY(-40px)
-        scale(1);
-}
-
-/* 봉투 제거 */
-
-.remove-envelope .envelope{
-    opacity:0;
-    transform:translateY(120px);
-    pointer-events:none;
-    transition:all .8s ease;
-}
-
-/* 최종 */
-
-.finish .card{
-    transform:
-        translateY(0)
-        scale(1);
-}
-
-/* 모바일 */
-
-@media(max-width:768px){
-
-.card{
-    width:96vw;
-}
-
-}
-</style>
-
-</head>
-
-<body>
-
-<div class="container" id="container">
-
-```
-<div class="card">
-    <img
-    src="https://cdn.discordapp.com/attachments/1398286165324468308/1516456048796504115/birthday.png.png?ex=6a32b540&is=6a3163c0&hm=0c4fc8fc4590f1fe39b5df9714ee49ba6160224d8e410ec8b5c32324be45130b&"
-    alt="Birthday Invitation">
-</div>
-
-<div class="envelope" id="envelope">
-
-    <div class="back"></div>
-    <div class="flap"></div>
-    <div class="front"></div>
-
-    <div class="hint">
-        💌 클릭해서 초대장 열기
-    </div>
-
-</div>
-```
-
-</div>
-
-<script>
-
-const container = document.getElementById("container");
-const envelope = document.getElementById("envelope");
-
-let opened = false;
-
-envelope.addEventListener("click", () => {
-
-    if(opened) return;
-    opened = true;
-
-    container.classList.add("open");
-
-    setTimeout(() => {
-        container.classList.add("show-card");
-    }, 700);
-
-    setTimeout(() => {
-        container.classList.add("remove-envelope");
-    }, 1700);
-
-    setTimeout(() => {
-        container.classList.add("finish");
-    }, 2200);
-
-});
-
-</script>
-
-</body>
-</html>
-
