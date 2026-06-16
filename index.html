@@ -20,7 +20,7 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    background:linear-gradient(180deg,#edf6ff,#d7e9ff);
+    background:linear-gradient(180deg,#eef7ff,#d7e9ff);
     font-family:sans-serif;
 }
 
@@ -31,6 +31,263 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
+}
+
+/* 초대장 */
+
+.card{
+    position:absolute;
+    width:min(92vw,700px);
+    z-index:5;
+    cursor:pointer;
+
+    transform:
+        translateY(160px)
+        scale(.45);
+
+    transition:
+        transform 1.5s cubic-bezier(.16,1,.3,1);
+}
+
+.card img{
+    width:100%;
+    display:block;
+    border-radius:20px;
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.25);
+}
+
+/* 봉투 */
+
+.envelope{
+    position:absolute;
+    width:min(80vw,420px);
+    height:min(52vw,260px);
+    cursor:pointer;
+    z-index:20;
+    transition:all .8s ease;
+}
+
+.back{
+    position:absolute;
+    inset:0;
+    background:#c7ddff;
+    border-radius:0 0 20px 20px;
+}
+
+.front{
+    position:absolute;
+    inset:0;
+    background:#a8cbff;
+
+    clip-path:polygon(
+        0 0,
+        50% 58%,
+        100% 0,
+        100% 100%,
+        0 100%
+    );
+
+    z-index:25;
+}
+
+.flap{
+    position:absolute;
+    top:0;
+    width:100%;
+    height:55%;
+    background:#8dbbff;
+
+    clip-path:polygon(
+        0 0,
+        50% 100%,
+        100% 0
+    );
+
+    transform-origin:top center;
+    transition:transform 1s ease;
+
+    z-index:30;
+}
+
+.hint{
+    position:absolute;
+    width:100%;
+    bottom:-55px;
+    text-align:center;
+    color:#5a7fc4;
+    font-weight:bold;
+}
+
+/* 열림 */
+
+.open .flap{
+    transform:rotateX(180deg);
+}
+
+/* 봉투 안에서 카드가 올라옴 */
+
+.show-card .card{
+    transform:
+        translateY(-220px)
+        scale(.75);
+}
+
+/* 봉투 제거 */
+
+.remove-envelope .envelope{
+    opacity:0;
+    transform:translateY(80px);
+    pointer-events:none;
+}
+
+/* 중앙 확대 */
+
+.finish .card{
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+/* 반짝이 */
+
+.sparkles{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 1s;
+}
+
+.sparkles::before{
+    content:"✨ ✨ ✨ ✨ ✨";
+    position:absolute;
+    top:15%;
+    width:100%;
+    text-align:center;
+    font-size:36px;
+}
+
+.sparkles::after{
+    content:"✨ ✨ ✨ ✨ ✨";
+    position:absolute;
+    bottom:15%;
+    width:100%;
+    text-align:center;
+    font-size:36px;
+}
+
+.finish .sparkles{
+    opacity:1;
+}
+
+@media(max-width:768px){
+
+.card{
+    width:95vw;
+}
+
+.hint{
+    font-size:14px;
+}
+
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container" id="container">
+
+```
+<div class="sparkles"></div>
+
+<div class="card" id="card">
+    <img src="https://cdn.discordapp.com/attachments/1398286165324468308/1516456048796504115/birthday.png.png?ex=6a32b540&is=6a3163c0&hm=0c4fc8fc4590f1fe39b5df9714ee49ba6160224d8e410ec8b5c32324be45130b&" alt="">
+</div>
+
+<div class="envelope" id="envelope">
+
+    <div class="back"></div>
+    <div class="front"></div>
+    <div class="flap"></div>
+
+    <div class="hint">
+        💌 클릭해서 초대장 열기
+    </div>
+
+</div>
+```
+
+</div>
+
+<script>
+
+const container = document.getElementById("container");
+const envelope = document.getElementById("envelope");
+const card = document.getElementById("card");
+
+let opened = false;
+let animating = false;
+
+function openEnvelope(){
+
+    if(animating || opened) return;
+
+    animating = true;
+
+    container.classList.add("open");
+
+    setTimeout(()=>{
+        container.classList.add("show-card");
+    },700);
+
+    setTimeout(()=>{
+        container.classList.add("remove-envelope");
+    },2200);
+
+    setTimeout(()=>{
+        container.classList.add("finish");
+        opened = true;
+        animating = false;
+    },3000);
+}
+
+function closeEnvelope(){
+
+    if(animating || !opened) return;
+
+    animating = true;
+
+    container.classList.remove("finish");
+
+    setTimeout(()=>{
+        container.classList.remove("remove-envelope");
+    },300);
+
+    setTimeout(()=>{
+        container.classList.remove("show-card");
+    },900);
+
+    setTimeout(()=>{
+        container.classList.remove("open");
+    },1600);
+
+    setTimeout(()=>{
+        opened = false;
+        animating = false;
+    },2200);
+}
+
+envelope.addEventListener("click", openEnvelope);
+card.addEventListener("click", closeEnvelope);
+
+</script>
+
+</body>
+</html>
+
 }
 
 /* 초대장 */
